@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_imageadjust" default="compile.module.imageadjust">
+  <dirname property="module.imageadjust.basedir" file="${ant.file.module_imageadjust}"/>
+  
+  <property name="module.jdk.home.imageadjust" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.imageadjust" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.imageadjust" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.imageadjust" value="-encoding UTF-8 -source 1.8 -target 1.8 ${compiler.args}"/>
+  
+  <property name="imageadjust.output.dir" value="${module.imageadjust.basedir}/out/production/imageAdjust"/>
+  <property name="imageadjust.testoutput.dir" value="${module.imageadjust.basedir}/out/test/imageAdjust"/>
+  
+  <path id="imageadjust.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="imageadjust.module.production.classpath">
+    <path refid="${module.jdk.classpath.imageadjust}"/>
+  </path>
+  
+  <path id="imageadjust.runtime.production.module.classpath">
+    <pathelement location="${imageadjust.output.dir}"/>
+  </path>
+  
+  <path id="imageadjust.module.classpath">
+    <path refid="${module.jdk.classpath.imageadjust}"/>
+    <pathelement location="${imageadjust.output.dir}"/>
+  </path>
+  
+  <path id="imageadjust.runtime.module.classpath">
+    <pathelement location="${imageadjust.testoutput.dir}"/>
+    <pathelement location="${imageadjust.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.imageadjust">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.imageadjust">
+    <patternset refid="excluded.from.module.imageadjust"/>
+  </patternset>
+  
+  <path id="imageadjust.module.sourcepath">
+    <dirset dir="${module.imageadjust.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.imageadjust" depends="compile.module.imageadjust.production,compile.module.imageadjust.tests" description="Compile module imageAdjust"/>
+  
+  <target name="compile.module.imageadjust.production" depends="register.custom.compilers" description="Compile module imageAdjust; production classes">
+    <mkdir dir="${imageadjust.output.dir}"/>
+    <javac2 destdir="${imageadjust.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.imageadjust}/javac">
+      <compilerarg line="${compiler.args.imageadjust}"/>
+      <bootclasspath refid="imageadjust.module.bootclasspath"/>
+      <classpath refid="imageadjust.module.production.classpath"/>
+      <src refid="imageadjust.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.imageadjust"/>
+    </javac2>
+    
+    <copy todir="${imageadjust.output.dir}">
+      <fileset dir="${module.imageadjust.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.imageadjust.tests" depends="register.custom.compilers,compile.module.imageadjust.production" description="compile module imageAdjust; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.imageadjust" description="cleanup module">
+    <delete dir="${imageadjust.output.dir}"/>
+    <delete dir="${imageadjust.testoutput.dir}"/>
+  </target>
+</project>
