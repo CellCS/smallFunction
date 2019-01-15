@@ -12,7 +12,7 @@ import java.io.*;
 
 public class Main {
 
-
+    private static String OS = System.getProperty("os.name").toLowerCase();
     private int IMG_WIDTH = 676;
     private static final int IMG_HEIGHT = 100;
 
@@ -20,18 +20,42 @@ public class Main {
 
 
     public static void main(String[] args) {
-        String inputStr = "";
+        
+        System.out.println(OS);
 
-        System.out.println("Please type the folder directory! like: C:\\Users\\bmesy\\Desktop\\New folder");
+        if (isWindows()) {
+            System.out.println("This is Windows");
+        } else if (isMac()) {
+            System.out.println("This is Mac");
+        } else if (isUnix()) {
+            System.out.println("This is Unix or Linux");
+        } else if (isSolaris()) {
+            System.out.println("This is Solaris");
+        } else {
+            System.out.println("Your OS is not support!!");
+        }
+
+        // print out all java setting env
+        //System.getProperties().list(System.out);
+
+
+
+        String inputStr = "";
+        String defaultLocation = "/Users/?????/Desktop/Images";
+    //"C:\\Users\\???????\\Desktop\\New folder"
+
+        System.out.println("Please type the folder directory! like: C:\\Users\\????\\Desktop\\New folder");
         System.out.println("Default is : C:\\Users\\bmesy\\Desktop\\New folder");
         System.out.println("Please type \"y\" if you choose default dir. Or type your own dir:");
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 
+
+
         try {
             inputStr = br.readLine();
             if(inputStr.indexOf("y")==0){
-                inputStr = "C:\\Users\\bmesy\\Desktop\\New folder";
+                inputStr = defaultLocation;
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -78,10 +102,10 @@ public class Main {
     }
 
     public static void resizeImage(String dir, String imageName, int index, float userSetRatio, Boolean isUserSetRation) {
-        String finalName = dir + "\\" + "img-" + Integer.toString(index)+".png";
+        String finalName = dir + "/" + "img-" + Integer.toString(index)+".png";
         float ration = 0;
         try {
-            File input = new File(dir + "\\" + imageName);
+            File input = new File(dir + "/" + imageName);
             BufferedImage image = ImageIO.read(input);
             int originalWidth = image.getWidth();
             if(isUserSetRation){ration = userSetRatio;}else{ration = (float) 676 / originalWidth;}
@@ -125,6 +149,31 @@ public class Main {
         g2d.dispose();
         return resized;
     }
+
+        public static boolean isWindows() {
+
+        return (OS.indexOf("win") >= 0);
+
+    }
+
+    public static boolean isMac() {
+
+        return (OS.indexOf("mac") >= 0);
+
+    }
+
+    public static boolean isUnix() {
+
+        return (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0 );
+        
+    }
+
+    public static boolean isSolaris() {
+
+        return (OS.indexOf("sunos") >= 0);
+
+    }
+
 
 }
 
